@@ -3,11 +3,10 @@ import { PushButton, ButtonState } from './modules/buttons'
 import { LightUpPanels, PanelState, Panel, panels, activatePanel } from './modules/panels';
 import { PlaySequence, GameData, State, newGame, checkGuess } from './modules/gameState';
 
-// Create an entity to hold the gameState as a tuple
+// Create a component to hold the gameState
 
-let game = new Entity()
 let gameData = new GameData()
-game.add(gameData)
+
 
 
 // Stat systems 
