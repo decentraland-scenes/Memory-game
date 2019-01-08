@@ -1,148 +1,21 @@
 
-let TIME_ON = 0.3
+import { PushButton, ButtonState } from './modules/buttons'
+import { LightUpPanels, PanelState, Panel, panels, activatePanel } from './modules/panels';
+import { PlaySequence, GameData, State, newGame, checkGuess } from './modules/gameState';
 
-export enum Panel {
-  GREEN,
-  RED,
-  YELLOW,
-  BLUE
-}
+// Create an entity to hold the gameState as a tuple
 
-
-export enum State {
-  PLAYING,
-  LISTENING,
-  IDLE
-}
+let game = new Entity()
+let gameData = new GameData()
+game.add(gameData)
 
 
-@Component('gameState')
-export class GameState {
-  state: State = State.IDLE
-  difficulty: number = 0
-  sequence: Panel[] = []
-  playingIndex: number = 0
-  gapTime: number = 0.5
-  guessSequence: Panel[] = []
-  lockedInput: boolean = true
-  reset(){
-    this.difficulty = 0
-    this.sequence = []
-    this.guessSequence = []
-    this.lockedInput = true
-    this.playingIndex = -1
-    this.gapTime =  0.5
-  }
-  resetPlaying(){
-    this.playingIndex = -1
-    this.gapTime =  0.5
-    this.sequence = []
-    this.guessSequence = []
-  }
-}
+// Stat systems 
 
-@Component('panelState')
-export class PanelState {
-  onColor: Material
-  offColor: Material
-  color: Panel
-  active: boolean = false
-  timeLeft: number = TIME_ON
-  constructor(on: Material, off: Material, panel: Panel){
-    this.onColor = on
-    this.offColor = off
-    this.color = panel 
-  }
-  activate(){
-    this.active = true
-    this.timeLeft = TIME_ON
-  }
-}
+engine.addSystem(new PlaySequence(gameData))
 
-const panels = engine.getComponentGroup(PanelState)
-
-@Component('buttonData')
-export class ButtonData {
-  yUp: number = 0
-  yDown: number = 0
-  pressed: boolean
-  fraction: number
-  timeDown: number
-  constructor(yUp: number, yDown: number){
-    this.yUp = yUp
-    this.yDown = yDown
-    this.pressed = false
-    this.fraction = 0
-    this.timeDown = 2
-  }
-}
-
-export class playSequence implements ISystem {
-  update(dt: number) {
-    if (gameState.state == State.PLAYING){
-      gameState.gapTime -= dt
-      if ( gameState.gapTime<0){
-        let color = gameState.sequence[gameState.playingIndex]
-        activatePanel(color)
-        gameState.gapTime =  0.5
-        gameState.playingIndex += 1
-        if(gameState.playingIndex == gameState.sequence.length){
-          gameState.state = State.LISTENING
-        }
-      }
-    }  
-  }
-}
-
-engine.addSystem(new playSequence())
-
-export class activatePanels implements ISystem {
-  update(dt: number) {
-    for( let panel of panels.entities){
-      let p = panel.get(PanelState)
-      if (p.active){
-        panel.remove(Material)
-        panel.set(p.onColor)
-        p.timeLeft -= dt
-        if (p.timeLeft < 0){
-          p.active = false
-        }
-      }
-      else {
-          panel.remove(Material)
-        panel.set(p.offColor)
-      }
-    }
-  }
-}
-
-engine.addSystem(new activatePanels())
+engine.addSystem(new LightUpPanels())
    
-
-export class PushButton implements ISystem {
-  update(dt: number) {
-
-    let transform = button.get(Transform)
-    let state = button.get(ButtonData)
-    if (state.pressed == true){
-      if (state.fraction < 1){
-        transform.position.y = Scalar.Lerp(state.yUp, state.yDown, state.fraction)
-        state.fraction += 1/8
-      }
-      state.timeDown -= dt
-      if (state.timeDown < 0){
-        state.pressed = false
-        state.timeDown = 2
-      }
-    }
-    else if (state.pressed == false && state.fraction > 0){
-      transform.position.y = Scalar.Lerp(state.yUp, state.yDown, state.fraction)
-      state.fraction -= 1/8
-    }
-  }
-  
-}
-
 engine.addSystem(new PushButton())
 
 
@@ -176,14 +49,10 @@ blueOn.emissiveColor = Color3.FromHexString("#0000ff")
 let blueOff = new Material()
 blueOff.albedoColor = Color3.FromHexString("#000088")
 
-// Game tuple
 
-let game = new Entity()
-let gameState = new GameState()
-game.add(gameState)
+// INITIAL ENTITIES
 
-// Scenery objects
-
+// board and panels
 let board = new Entity()
 board.add(new GLTFShape("models/Simon.gltf"))
 board.add(new Transform({
@@ -204,8 +73,9 @@ green.add(new Transform({
 }))
 green.setParent(board)
 green.add(new OnClick(e => {
-  if (gameState.state == State.LISTENING){
+  if (gameData.state == State.LISTENING){
     activatePanel(Panel.GREEN)
+    checkGuess(gameData, Panel.GREEN)
   }
 }))
 engine.addEntity(green)
@@ -221,8 +91,9 @@ red.add(new Transform({
 red.setParent(board)
 red.set(redOff)
 red.add(new OnClick(e => {
-  if (gameState.state == State.LISTENING){
+  if (gameData.state == State.LISTENING){
     activatePanel(Panel.RED)
+    checkGuess(gameData, Panel.RED)
   }
 }))
 engine.addEntity(red)
@@ -238,8 +109,9 @@ yellow.add(new Transform({
 yellow.setParent(board)
 yellow.set(yellowOff)
 yellow.add(new OnClick(e => {
-  if (gameState.state == State.LISTENING){
+  if (gameData.state == State.LISTENING){
     activatePanel(Panel.YELLOW)
+    checkGuess(gameData, Panel.YELLOW)
   }
 }))
 engine.addEntity(yellow)
@@ -255,25 +127,28 @@ blue.add(new Transform({
 blue.setParent(board)
 blue.set(blueOff)
 blue.add(new OnClick(e => {
-  if (gameState.state == State.LISTENING){
+  if (gameData.state == State.LISTENING){
     activatePanel(Panel.BLUE)
+    checkGuess(gameData, Panel.BLUE)
   }
 }))
 engine.addEntity(blue)
 
+// central button
 let button = new Entity()
 button.setParent(board)
 button.add(new Transform({
   position: new Vector3(0, 0.05, 0),
 }))
 button.add(new GLTFShape("models/Simon_Button.gltf"))
-button.add(new ButtonData(0.07, -0.05))
+button.add(new ButtonState(0.07, -0.05))
 button.add(new OnClick(e => {
-  newGame(0)
-  button.get(ButtonData).pressed = true
+  newGame(gameData)
+  button.get(ButtonState).pressed = true
 }))
 engine.addEntity(button)
 
+// background
 let scenery = new Entity()
 scenery.add(new Transform({
   position : new Vector3(5, 0.05, 5)
@@ -283,81 +158,3 @@ engine.addEntity(scenery)
 
 
 
-// // Helper functions
-
-function activatePanel(color: Panel){
-
-  for( let panel of panels.entities ){
-    let p = panel.get(PanelState)
-    if (p.color === color){
-      p.activate()
-    } else {
-      p.active = false
-    }
-  }
-  if (gameState.state == State.LISTENING){
-    log("clicked " , color)
-    checkGuess(color)
-  }
-}
-
-
-
-
-function newGame(difficulty: number) {
-    if (difficulty == 0){
-      gameState.reset()
-    }
-    const sequence = randomSequence(difficulty+1);
-    gameState.resetPlaying()
-    gameState.sequence = sequence
-    gameState.state = State.PLAYING
-
-    log("stated playing, diff: ", difficulty, " seq: ", gameState.sequence)
-  }
-
-
-function  randomSequence(difficulty: number): Panel[] {
-    const pool = Object.keys(Panel)
-    let arr: Panel[] = []
-
-    for (let i = 0; i < difficulty; i++) {
-      const index = Math.floor(Math.random() * pool.length)
-      const key = pool[index] as keyof typeof Panel
-      const panel = Panel[key] as Panel
-      arr.push(panel)
-    }
-
-    return arr
-  }
-
-function checkGuess(color: Panel) {
-    
-
-    gameState.guessSequence.push(color)
-    log(gameState.guessSequence)
-
-    if (gameState.sequence[gameState.guessSequence.length-1] !== color) {
-      lose()
-      return
-    }
-
-    if (gameState.guessSequence.length === gameState.sequence.length) {
-      // Winner winner chicken dinner
-      log("You win! Keep going!");
-      gameState.difficulty += 1
-      newGame(gameState.difficulty);
-      return
-    }
-  }
-
-
-function lose(){
-  log("You lose!")
-  gameState.reset()
-  gameState.state = State.IDLE
-  for( let panel of panels.entities ){
-    let p = panel.get(PanelState)
-    p.activate()
-  }
-}
