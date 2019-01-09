@@ -8,8 +8,7 @@ export enum State {
   IDLE
 }
 
-// game state component
-@Component('gameData')
+// game data  object
 export class GameData {
   state: State = State.IDLE
   difficulty: number = 0

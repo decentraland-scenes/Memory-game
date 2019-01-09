@@ -3,10 +3,9 @@ import { PushButton, ButtonState } from './modules/buttons'
 import { LightUpPanels, PanelState, Panel, panels, activatePanel } from './modules/panels';
 import { PlaySequence, GameData, State, newGame, checkGuess } from './modules/gameState';
 
-// Create a component to hold the gameState
+// Create an object to hold the gameState
 
 let gameData = new GameData()
-
 
 
 // Stat systems 
