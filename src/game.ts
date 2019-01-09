@@ -1,7 +1,7 @@
 
 import { PushButton, ButtonState } from './modules/buttons'
 import { LightUpPanels, PanelState, Panel, panels, activatePanel } from './modules/panels';
-import { PlaySequence, GameData, State, newGame, checkGuess } from './modules/gameState';
+import { PlaySequence, GameData, State, newGame, checkGuess } from './modules/gameData';
 
 // Create an object to hold the gameState
 
