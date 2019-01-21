@@ -1,4 +1,4 @@
-import { GameData } from "./gameState";
+import { GameData } from "./gameData";
 
 // parameter to set how long to leave a panel light on
 let TIME_ON = 0.3
