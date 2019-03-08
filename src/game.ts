@@ -52,8 +52,8 @@ blueOff.albedoColor = Color3.FromHexString("#000088")
 
 // board and panels
 let board = new Entity()
-board.add(new GLTFShape("models/Simon.gltf"))
-board.add(new Transform({
+board.addComponent(new GLTFShape("models/Simon.gltf"))
+board.addComponent(new Transform({
   position: new Vector3(5, 1.5, 5),
   rotation: Quaternion.Euler(90, 0, 0),
   scale: new Vector3(0.5, 0.5, 0.5)
@@ -61,16 +61,16 @@ board.add(new Transform({
 engine.addEntity(board)
 
 let green = new Entity()
-green.set(greenOff)
-green.add(new PlaneShape())
-green.add(new PanelState(greenOn, greenOff, Panel.GREEN))
-green.add(new Transform({
+green.addComponent(greenOff)
+green.addComponent(new PlaneShape())
+green.addComponent(new PanelState(greenOn, greenOff, Panel.GREEN))
+green.addComponent(new Transform({
   position: new Vector3(1, 0.05, -1),
   rotation: Quaternion.Euler(90, 0, 0),
   scale: new Vector3(2, 2, 2)
 }))
 green.setParent(board)
-green.add(new OnClick(e => {
+green.addComponent(new OnPointerDown(e => {
   if (gameData.state == State.LISTENING){
     activatePanel(Panel.GREEN)
     checkGuess(gameData, Panel.GREEN)
@@ -79,16 +79,16 @@ green.add(new OnClick(e => {
 engine.addEntity(green)
 
 let red = new Entity()
-red.add(new PlaneShape())
-red.add(new PanelState(redOn, redOff, Panel.RED))
-red.add(new Transform({
+red.addComponent(new PlaneShape())
+red.addComponent(new PanelState(redOn, redOff, Panel.RED))
+red.addComponent(new Transform({
   position: new Vector3(1, 0.05, 1),
   rotation: Quaternion.Euler(90, 0, 0),
   scale: new Vector3(2, 2, 2)
 }))
 red.setParent(board)
-red.set(redOff)
-red.add(new OnClick(e => {
+red.addComponent(redOff)
+red.addComponent(new OnPointerDown(e => {
   if (gameData.state == State.LISTENING){
     activatePanel(Panel.RED)
     checkGuess(gameData, Panel.RED)
@@ -97,16 +97,16 @@ red.add(new OnClick(e => {
 engine.addEntity(red)
 
 let yellow = new Entity()
-yellow.add(new PlaneShape())
-yellow.add(new PanelState(yellowOn, yellowOff, Panel.YELLOW))
-yellow.add(new Transform({
+yellow.addComponent(new PlaneShape())
+yellow.addComponent(new PanelState(yellowOn, yellowOff, Panel.YELLOW))
+yellow.addComponent(new Transform({
   position: new Vector3(-1, 0.05, -1),
   rotation: Quaternion.Euler(90, 0, 0),
   scale: new Vector3(2, 2, 2)
 }))
 yellow.setParent(board)
-yellow.set(yellowOff)
-yellow.add(new OnClick(e => {
+yellow.addComponent(yellowOff)
+yellow.addComponent(new OnPointerDown(e => {
   if (gameData.state == State.LISTENING){
     activatePanel(Panel.YELLOW)
     checkGuess(gameData, Panel.YELLOW)
@@ -115,16 +115,16 @@ yellow.add(new OnClick(e => {
 engine.addEntity(yellow)
 
 let blue = new Entity()
-blue.add(new PlaneShape())
-blue.add(new PanelState(blueOn, blueOff, Panel.BLUE))
-blue.add(new Transform({
+blue.addComponent(new PlaneShape())
+blue.addComponent(new PanelState(blueOn, blueOff, Panel.BLUE))
+blue.addComponent(new Transform({
   position: new Vector3(-1, 0.05, 1),
   rotation: Quaternion.Euler(90, 0, 0),
   scale: new Vector3(2, 2, 2)
 }))
 blue.setParent(board)
-blue.set(blueOff)
-blue.add(new OnClick(e => {
+blue.addComponent(blueOff)
+blue.addComponent(new OnPointerDown(e => {
   if (gameData.state == State.LISTENING){
     activatePanel(Panel.BLUE)
     checkGuess(gameData, Panel.BLUE)
@@ -135,24 +135,24 @@ engine.addEntity(blue)
 // central button
 let button = new Entity()
 button.setParent(board)
-button.add(new Transform({
+button.addComponent(new Transform({
   position: new Vector3(0, 0.05, 0),
 }))
-button.add(new GLTFShape("models/Simon_Button.gltf"))
-button.add(new ButtonState(0.07, -0.05))
-button.add(new OnClick(e => {
+button.addComponent(new GLTFShape("models/Simon_Button.gltf"))
+button.addComponent(new ButtonState(0.07, -0.05))
+button.addComponent(new OnPointerDown(e => {
   newGame(gameData)
-  button.get(ButtonState).pressed = true
+  button.getComponent(ButtonState).pressed = true
 }))
 engine.addEntity(button)
 
 // background
-let scenery = new Entity()
-scenery.add(new Transform({
+let environment = new Entity()
+environment.addComponent(new Transform({
   position : new Vector3(5, 0.05, 5)
 }))
-scenery.add(new GLTFShape("models/Simon_scene.gltf"))
-engine.addEntity(scenery)
+environment.addComponent(new GLTFShape("models/Simon_scene.gltf"))
+engine.addEntity(environment)
 
 
 

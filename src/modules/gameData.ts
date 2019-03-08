@@ -102,7 +102,7 @@ export function lose(gameData: GameData) {
   gameData.reset()
   gameData.state = State.IDLE
   for (let panel of panels.entities) {
-    let p = panel.get(PanelState)
+    let p = panel.getComponent(PanelState)
     p.activate()
   }
 }

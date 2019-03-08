@@ -37,18 +37,16 @@ export const panels = engine.getComponentGroup(PanelState)
 export class LightUpPanels implements ISystem {
     update(dt: number) {
       for( let panel of panels.entities){
-        let p = panel.get(PanelState)
+        let p = panel.getComponent(PanelState)
         if (p.active){
-          panel.remove(Material)
-          panel.set(p.onColor)
+          panel.addComponentOrReplace(p.onColor)
           p.timeLeft -= dt
           if (p.timeLeft < 0){
             p.active = false
           }
         }
         else {
-            panel.remove(Material)
-          panel.set(p.offColor)
+          panel.addComponentOrReplace(p.offColor)
         }
       }
     }
@@ -57,7 +55,7 @@ export class LightUpPanels implements ISystem {
 
   export function activatePanel(color: Panel) {
     for (let panel of panels.entities) {
-      let p = panel.get(PanelState)
+      let p = panel.getComponent(PanelState)
       if (p.color === color) {
         p.activate()
       } else {
