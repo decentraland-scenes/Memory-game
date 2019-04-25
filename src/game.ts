@@ -54,9 +54,9 @@ blueOff.albedoColor = Color3.FromHexString("#000088")
 let board = new Entity()
 board.addComponent(new GLTFShape("models/Simon.gltf"))
 board.addComponent(new Transform({
-  position: new Vector3(5, 1.5, 5),
-  rotation: Quaternion.Euler(90, 180, 0),
-  scale: new Vector3(0.5, 0.5, 0.5)
+  position: new Vector3(8, 2.2, 8),
+  rotation: Quaternion.Euler(90, 0, 180),
+  scale: new Vector3(0.7, 0.7, 0.7)
 })) 
 engine.addEntity(board)
 
@@ -150,8 +150,8 @@ engine.addEntity(button)
 // background
 let environment = new Entity()
 environment.addComponent(new Transform({
-  position : new Vector3(5, 0.05, 5),
-  rotation: Quaternion.Euler(0, 180, 0)
+  position : new Vector3(8, 0.05, 8),
+  scale: new Vector3(1.6, 1.6, 1.6)
 }))
 environment.addComponent(new GLTFShape("models/Simon_scene.gltf"))
 engine.addEntity(environment)
