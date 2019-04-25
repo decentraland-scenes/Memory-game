@@ -66,7 +66,7 @@ green.addComponent(new PlaneShape())
 green.addComponent(new PanelState(greenOn, greenOff, Panel.GREEN))
 green.addComponent(new Transform({
   position: new Vector3(1, 0.05, -1),
-  rotation: Quaternion.Euler(90, 0, 0),
+  rotation: Quaternion.Euler(90, 180, 0),
   scale: new Vector3(2, 2, 2)
 }))
 green.setParent(board)
@@ -83,7 +83,7 @@ red.addComponent(new PlaneShape())
 red.addComponent(new PanelState(redOn, redOff, Panel.RED))
 red.addComponent(new Transform({
   position: new Vector3(1, 0.05, 1),
-  rotation: Quaternion.Euler(90, 0, 0),
+  rotation: Quaternion.Euler(90, 180, 0),
   scale: new Vector3(2, 2, 2)
 }))
 red.setParent(board)
@@ -101,7 +101,7 @@ yellow.addComponent(new PlaneShape())
 yellow.addComponent(new PanelState(yellowOn, yellowOff, Panel.YELLOW))
 yellow.addComponent(new Transform({
   position: new Vector3(-1, 0.05, -1),
-  rotation: Quaternion.Euler(90, 0, 0),
+  rotation: Quaternion.Euler(90, 180, 0),
   scale: new Vector3(2, 2, 2)
 }))
 yellow.setParent(board)
@@ -119,7 +119,7 @@ blue.addComponent(new PlaneShape())
 blue.addComponent(new PanelState(blueOn, blueOff, Panel.BLUE))
 blue.addComponent(new Transform({
   position: new Vector3(-1, 0.05, 1),
-  rotation: Quaternion.Euler(90, 0, 0),
+  rotation: Quaternion.Euler(90, 180, 0),
   scale: new Vector3(2, 2, 2)
 }))
 blue.setParent(board)
@@ -137,6 +137,7 @@ let button = new Entity()
 button.setParent(board)
 button.addComponent(new Transform({
   position: new Vector3(0, 0.05, 0),
+  rotation: Quaternion.Euler(0, 180, 0)
 }))
 button.addComponent(new GLTFShape("models/Simon_Button.gltf"))
 button.addComponent(new ButtonState(0.07, -0.05))
