@@ -70,7 +70,7 @@ green.addComponent(new Transform({
   scale: new Vector3(2, 2, 2)
 }))
 green.setParent(board)
-green.addComponent(new OnPointerDown(e => {
+green.addComponent(new OnClick(e => {
   if (gameData.state == State.LISTENING){
     activatePanel(Panel.GREEN)
     checkGuess(gameData, Panel.GREEN)
@@ -88,7 +88,7 @@ red.addComponent(new Transform({
 }))
 red.setParent(board)
 red.addComponent(redOff)
-red.addComponent(new OnPointerDown(e => {
+red.addComponent(new OnClick(e => {
   if (gameData.state == State.LISTENING){
     activatePanel(Panel.RED)
     checkGuess(gameData, Panel.RED)
@@ -106,7 +106,7 @@ yellow.addComponent(new Transform({
 }))
 yellow.setParent(board)
 yellow.addComponent(yellowOff)
-yellow.addComponent(new OnPointerDown(e => {
+yellow.addComponent(new OnClick(e => {
   if (gameData.state == State.LISTENING){
     activatePanel(Panel.YELLOW)
     checkGuess(gameData, Panel.YELLOW)
@@ -124,7 +124,7 @@ blue.addComponent(new Transform({
 }))
 blue.setParent(board)
 blue.addComponent(blueOff)
-blue.addComponent(new OnPointerDown(e => {
+blue.addComponent(new OnClick(e => {
   if (gameData.state == State.LISTENING){
     activatePanel(Panel.BLUE)
     checkGuess(gameData, Panel.BLUE)
@@ -141,7 +141,7 @@ button.addComponent(new Transform({
 }))
 button.addComponent(new GLTFShape("models/Simon_Button.gltf"))
 button.addComponent(new ButtonState(0.07, -0.05))
-button.addComponent(new OnPointerDown(e => {
+button.addComponent(new OnClick(e => {
   newGame(gameData)
   button.getComponent(ButtonState).pressed = true
 }))
