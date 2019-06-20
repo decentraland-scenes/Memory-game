@@ -1,7 +1,7 @@
 
 import { PushButton, ButtonState } from './modules/buttons'
 import { LightUpPanels, PanelState, Panel, panels, activatePanel } from './modules/panels';
-import { PlaySequence, GameData, State, newGame, checkGuess } from './modules/gameData';
+import { PlaySequence, GameData, State, checkGuess, randomSequence } from './modules/gameData';
 
 // Create an object to hold the gameState
 
@@ -15,6 +15,11 @@ engine.addSystem(new PlaySequence(gameData))
 engine.addSystem(new LightUpPanels())
    
 engine.addSystem(new PushButton())
+
+
+// // a message bus to sync state for all players
+export const sceneMessageBus = new MessageBus()
+
 
 
 // Materials
@@ -142,10 +147,35 @@ button.addComponent(new Transform({
 button.addComponent(new GLTFShape("models/Simon_Button.gltf"))
 button.addComponent(new ButtonState(0.07, -0.05))
 button.addComponent(new OnClick(e => {
-  newGame(gameData)
-  button.getComponent(ButtonState).pressed = true
+	
+	const sequence = randomSequence(gameData.difficulty + 1)
+	log("new game! ", sequence )
+	sceneMessageBus.emit("pushButton",{})
+	sceneMessageBus.emit("newRound", {colors: sequence, difficulty: gameData.difficulty})
+
 }))
 engine.addEntity(button)
+
+// push button down
+sceneMessageBus.on("pushButton", () => {	
+	button.getComponent(ButtonState).pressed = true
+
+  });
+
+// update game data
+sceneMessageBus.on("newRound", (info) => {		
+	if (info.difficulty == 0) {
+		gameData.reset()
+	  }else {
+		gameData.resetPlaying()
+	  }
+	gameData.sequence = info.colors
+	gameData.difficulty = info.difficulty
+  	gameData.state = State.PLAYING
+  });
+
+
+
 
 // background
 let environment = new Entity()

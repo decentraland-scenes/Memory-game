@@ -1,4 +1,5 @@
 import { Panel, panels, PanelState, activatePanel } from './panels'
+import { sceneMessageBus } from '../game';
 
 
 // possible game states
@@ -17,6 +18,8 @@ export class GameData {
   gapTime: number = 0.5
   guessSequence: Panel[] = []
   lockedInput: boolean = true
+  constructor() {
+  }
   reset() {
     this.difficulty = 0
     this.sequence = []
@@ -56,16 +59,17 @@ export class PlaySequence implements ISystem {
 }
 
 
-export function newGame(gameData: GameData) {
-  if (gameData.difficulty == 0) {
-    gameData.reset()
-  }else {
-    gameData.resetPlaying()
-  }
-  const sequence = randomSequence(gameData.difficulty + 1)
-  gameData.sequence = sequence
-  gameData.state = State.PLAYING
-}
+// export function newGame(gameData: GameData) {
+//   if (gameData.difficulty == 0) {
+//     gameData.reset()
+//   }else {
+//     gameData.resetPlaying()
+//   }
+//   const sequence = randomSequence(gameData.difficulty + 1)
+// //   gameData.sequence = sequence
+// //   gameData.state = State.PLAYING
+//   return sequence
+// }
 
 export function randomSequence(difficulty: number): Panel[] {
   const pool = Object.keys(Panel)
@@ -90,9 +94,12 @@ export function checkGuess(gameData: GameData, color: Panel) {
   }
   if (gameData.guessSequence.length === gameData.sequence.length) {
     // Winner winner chicken dinner
-    log('You win! Keep going!')
-    gameData.difficulty += 1
-    newGame(gameData)
+	log('You win! Keep going!')
+	const difficulty = gameData.difficulty
+	const sequence = randomSequence(gameData.difficulty + 1)
+
+	//sceneMessageBus.emit("newRound", {colors: sequence, difficulty: difficulty })
+
     return
   }
 }

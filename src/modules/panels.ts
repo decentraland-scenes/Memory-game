@@ -1,4 +1,4 @@
-import { GameData } from "./gameData";
+import { sceneMessageBus } from "../game";
 
 // parameter to set how long to leave a panel light on
 let TIME_ON = 0.3
@@ -10,6 +10,13 @@ export enum Panel {
     YELLOW = "yellow",
     BLUE = "blue"
   }
+
+
+/// --- Define a custom type to pass in messages ---
+export type NewActivePanel = {
+	active: Panel
+  };
+
 
 // component for panels  
 @Component('panelState')
@@ -63,3 +70,29 @@ export class LightUpPanels implements ISystem {
       }
     }
   }
+
+
+//   export function activatePanel(color: Panel) {
+// 	let p : NewActivePanel = {
+// 		active: color
+// 	  };
+	
+// 	//  sceneMessageBus.emit("activatePanel", p)  
+//   }
+
+
+
+//   // To execute when activating a panel
+//   sceneMessageBus.on("activatePanel", (info: NewActivePanel) => {	
+// 	for (let panel of panels.entities) {
+// 		let p = panel.getComponent(PanelState)
+// 		if (p.color === info.active) {
+// 		  p.activate()
+// 		} else {
+// 		  p.active = false
+// 		}
+// 	  }
+//   });
+
+
+  
