@@ -10,9 +10,9 @@ A Simon Says game, with click interactions and sequenced actions. The game gener
 
 ![](screenshot/screenshot.png)
 
-<!--
-[Explore the scene](): this link takes you to a copy of the scene deployed to a remote server where you can interact with it just as if you were running `dcl start` locally.
--->
+
+[Explore the scene](https://memory-game-vkysoawcea.now.sh): this link takes you to a copy of the scene deployed to a remote server where you can interact with it just as if you were running `dcl start` locally.
+
 
 **Install the CLI**
 
