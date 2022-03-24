@@ -1,6 +1,5 @@
 import { Panel, panels, PanelState, activatePanel } from './panels'
 
-
 // possible game states
 export enum State {
   PLAYING,
@@ -35,31 +34,30 @@ export class GameData {
 
 // system to play the color sequences
 export class PlaySequence implements ISystem {
-    game: GameData
-    constructor(gameData){
-        this.game = gameData
-    }
-  update(dt: number) { 
-      if (this.game.state == State.PLAYING) {
-        this.game.gapTime -= dt
-        if (this.game.gapTime < 0) {
-          let color = this.game.sequence[this.game.playingIndex]
-          activatePanel(color)
-          this.game.gapTime = 0.5
-          this.game.playingIndex += 1
-          if (this.game.playingIndex == this.game.sequence.length) {
-            this.game.state = State.LISTENING
-          }
+  game: GameData
+  constructor(gameData) {
+    this.game = gameData
+  }
+  update(dt: number) {
+    if (this.game.state === State.PLAYING) {
+      this.game.gapTime -= dt
+      if (this.game.gapTime < 0) {
+        const color = this.game.sequence[this.game.playingIndex]
+        activatePanel(color)
+        this.game.gapTime = 0.5
+        this.game.playingIndex += 1
+        if (this.game.playingIndex === this.game.sequence.length) {
+          this.game.state = State.LISTENING
         }
-      }  
+      }
+    }
   }
 }
 
-
 export function newGame(gameData: GameData) {
-  if (gameData.difficulty == 0) {
+  if (gameData.difficulty === 0) {
     gameData.reset()
-  }else {
+  } else {
     gameData.resetPlaying()
   }
   const sequence = randomSequence(gameData.difficulty + 1)
@@ -69,7 +67,7 @@ export function newGame(gameData: GameData) {
 
 export function randomSequence(difficulty: number): Panel[] {
   const pool = Object.keys(Panel)
-  let arr: Panel[] = []
+  const arr: Panel[] = []
 
   for (let i = 0; i < difficulty; i++) {
     const index = Math.floor(Math.random() * pool.length)
@@ -101,8 +99,8 @@ export function lose(gameData: GameData) {
   log('You lose!')
   gameData.reset()
   gameData.state = State.IDLE
-  for (let panel of panels.entities) {
-    let p = panel.getComponent(PanelState)
+  for (const panel of panels.entities) {
+    const p = panel.getComponent(PanelState)
     p.activate()
   }
 }

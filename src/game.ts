@@ -16,7 +16,7 @@ import {
 
 // Create an object to hold the gameState
 
-let gameData = new GameData()
+const gameData = new GameData()
 
 // Stat systems
 
@@ -28,38 +28,38 @@ engine.addSystem(new PushButton())
 
 // Materials
 
-let greenOn = new Material()
+const greenOn = new Material()
 greenOn.albedoColor = Color3.FromHexString('#00ff00')
 greenOn.emissiveColor = Color3.FromHexString('#00ff00')
 
-let greenOff = new Material()
+const greenOff = new Material()
 greenOff.albedoColor = Color3.FromHexString('#008800')
 
-let redOn = new Material()
+const redOn = new Material()
 redOn.albedoColor = Color3.FromHexString('#ff0000')
 redOn.emissiveColor = Color3.FromHexString('#ff0000')
 
-let redOff = new Material()
+const redOff = new Material()
 redOff.albedoColor = Color3.FromHexString('#880000')
 
-let yellowOn = new Material()
+const yellowOn = new Material()
 yellowOn.albedoColor = Color3.FromHexString('#ffff00')
 yellowOn.emissiveColor = Color3.FromHexString('#ffff00')
 
-let yellowOff = new Material()
+const yellowOff = new Material()
 yellowOff.albedoColor = Color3.FromHexString('#888800')
 
-let blueOn = new Material()
+const blueOn = new Material()
 blueOn.albedoColor = Color3.FromHexString('#0000ff')
 blueOn.emissiveColor = Color3.FromHexString('#0000ff')
 
-let blueOff = new Material()
+const blueOff = new Material()
 blueOff.albedoColor = Color3.FromHexString('#000088')
 
 // INITIAL ENTITIES
 
 // board and panels
-let board = new Entity()
+const board = new Entity()
 board.addComponent(new GLTFShape('models/Simon.gltf'))
 board.addComponent(
   new Transform({
@@ -70,7 +70,7 @@ board.addComponent(
 )
 engine.addEntity(board)
 
-let green = new Entity()
+const green = new Entity()
 green.addComponent(greenOff)
 green.addComponent(new PlaneShape())
 green.addComponent(new PanelState(greenOn, greenOff, Panel.GREEN))
@@ -84,8 +84,8 @@ green.addComponent(
 green.setParent(board)
 green.addComponent(
   new OnPointerDown(
-    e => {
-      if (gameData.state == State.LISTENING) {
+    (e) => {
+      if (gameData.state === State.LISTENING) {
         activatePanel(Panel.GREEN)
         checkGuess(gameData, Panel.GREEN)
       }
@@ -95,7 +95,7 @@ green.addComponent(
 )
 engine.addEntity(green)
 
-let red = new Entity()
+const red = new Entity()
 red.addComponent(new PlaneShape())
 red.addComponent(new PanelState(redOn, redOff, Panel.RED))
 red.addComponent(
@@ -109,8 +109,8 @@ red.setParent(board)
 red.addComponent(redOff)
 red.addComponent(
   new OnPointerDown(
-    e => {
-      if (gameData.state == State.LISTENING) {
+    (e) => {
+      if (gameData.state === State.LISTENING) {
         activatePanel(Panel.RED)
         checkGuess(gameData, Panel.RED)
       }
@@ -120,7 +120,7 @@ red.addComponent(
 )
 engine.addEntity(red)
 
-let yellow = new Entity()
+const yellow = new Entity()
 yellow.addComponent(new PlaneShape())
 yellow.addComponent(new PanelState(yellowOn, yellowOff, Panel.YELLOW))
 yellow.addComponent(
@@ -134,8 +134,8 @@ yellow.setParent(board)
 yellow.addComponent(yellowOff)
 yellow.addComponent(
   new OnPointerDown(
-    e => {
-      if (gameData.state == State.LISTENING) {
+    (e) => {
+      if (gameData.state === State.LISTENING) {
         activatePanel(Panel.YELLOW)
         checkGuess(gameData, Panel.YELLOW)
       }
@@ -145,7 +145,7 @@ yellow.addComponent(
 )
 engine.addEntity(yellow)
 
-let blue = new Entity()
+const blue = new Entity()
 blue.addComponent(new PlaneShape())
 blue.addComponent(new PanelState(blueOn, blueOff, Panel.BLUE))
 blue.addComponent(
@@ -159,8 +159,8 @@ blue.setParent(board)
 blue.addComponent(blueOff)
 blue.addComponent(
   new OnPointerDown(
-    e => {
-      if (gameData.state == State.LISTENING) {
+    (e) => {
+      if (gameData.state === State.LISTENING) {
         activatePanel(Panel.BLUE)
         checkGuess(gameData, Panel.BLUE)
       }
@@ -171,7 +171,7 @@ blue.addComponent(
 engine.addEntity(blue)
 
 // central button
-let button = new Entity()
+const button = new Entity()
 button.setParent(board)
 button.addComponent(
   new Transform({
@@ -183,7 +183,7 @@ button.addComponent(new GLTFShape('models/Simon_Button.gltf'))
 button.addComponent(new ButtonState(0.07, -0.05))
 button.addComponent(
   new OnPointerDown(
-    e => {
+    (e) => {
       newGame(gameData)
       button.getComponent(ButtonState).pressed = true
     },
@@ -193,7 +193,7 @@ button.addComponent(
 engine.addEntity(button)
 
 // background
-let environment = new Entity()
+const environment = new Entity()
 environment.addComponent(
   new Transform({
     position: new Vector3(8, 0.05, 8),

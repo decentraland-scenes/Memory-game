@@ -7,7 +7,7 @@ export class ButtonState {
   pressed: boolean = false
   fraction: number = 0
   timeDown: number
-  constructor(yUp: number, yDown: number){
+  constructor(yUp: number, yDown: number) {
     this.yUp = yUp
     this.yDown = yDown
     this.timeDown = 2
@@ -18,30 +18,35 @@ export class ButtonState {
 
 const buttons = engine.getComponentGroup(ButtonState)
 
-
 // Button system   (button stayed pressed for fixed time)
 
 export class PushButton implements ISystem {
-    update(dt: number) {
-        for (let button of buttons.entities) {
-            let transform = button.getComponent(Transform)
-            let state = button.getComponent(ButtonState)
-            if (state.pressed == true){
-                if (state.fraction < 1){
-                transform.position.y = Scalar.Lerp(state.yUp, state.yDown, state.fraction)
-                state.fraction += 1/8
-                }
-                state.timeDown -= dt
-                if (state.timeDown < 0){
-                state.pressed = false
-                state.timeDown = 2
-                }
-            }
-            else if (state.pressed == false && state.fraction > 0){
-                transform.position.y = Scalar.Lerp(state.yUp, state.yDown, state.fraction)
-                state.fraction -= 1/8
-            }
+  update(dt: number) {
+    for (const button of buttons.entities) {
+      const transform = button.getComponent(Transform)
+      const state = button.getComponent(ButtonState)
+      if (state.pressed === true) {
+        if (state.fraction < 1) {
+          transform.position.y = Scalar.Lerp(
+            state.yUp,
+            state.yDown,
+            state.fraction
+          )
+          state.fraction += 1 / 8
         }
-    }   
-    
+        state.timeDown -= dt
+        if (state.timeDown < 0) {
+          state.pressed = false
+          state.timeDown = 2
+        }
+      } else if (state.pressed === false && state.fraction > 0) {
+        transform.position.y = Scalar.Lerp(
+          state.yUp,
+          state.yDown,
+          state.fraction
+        )
+        state.fraction -= 1 / 8
+      }
+    }
   }
+}
